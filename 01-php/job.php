@@ -5,9 +5,9 @@ require($class_path."Db.php");
 require($class_path."Init.php");
 
 $mysql_params = [
-    'user'=>'snake',
-    'pass'=>'dreams',
-    'host'=>'192.168.1.10',
+    'user'=>'',
+    'pass'=>'',
+    'host'=>'',
     'base'=>'luxtest'
 ];
 
