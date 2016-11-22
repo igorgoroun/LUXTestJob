@@ -14,18 +14,27 @@ final class Init {
      *
      * I've got a simplest way - drop table before it's created,
      * but the better way is to check is table exists
+     *
+     * @param bool $force
      */
-    private function create () {
-        /* drop table before */
-        $drop_query = "drop table if exists `{$this->tbl}`";
-        try {
-            $this->db->Query($drop_query);
-        } catch (Exception $e) {
-            print $e->getMessage();
+    private function create ($force=false) {
+        /* drop table before, if force is true */
+        if ($force) {
+            $drop_query = "drop table if exists `{$this->tbl}`";
+            try {
+                $this->db->Query($drop_query);
+            } catch (Exception $e) {
+                print $e->getMessage();
+            }
+            /* create table prefix */
+            $query = "create table ";
+        /* or start query with table existance chech */
+        } else {
+            $query = "create table if not exists ";
         }
 
         /* table creation query */
-        $query = "create table `{$this->tbl}` (
+        $query .= "`{$this->tbl}` (
           `id` int(11) not null auto_increment,
           `script_name` varchar(25) default NULL,
           `start_time` timestamp default '0000-00-00 00:00:00',
@@ -34,6 +43,7 @@ final class Init {
           primary key (`id`),
           KEY `res_ind` (`result`)
           ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+
 
         /* try to create table or catch exception */
         try {
@@ -51,8 +61,11 @@ final class Init {
      * script_name field fills with list of scripts in /usr/bin
      * end_time is always bigger than start_time
      * result is one of ['normal','illegal','failed','success']
+     *
+     * @param int $lines
+     * @return void
      */
-    private function fill () {
+    private function fill ($lines=100) {
         /* get values for field `script_name` */
         $scriptsList = scandir("/usr/bin");
 
@@ -67,12 +80,12 @@ final class Init {
 
         /* create data for insert */
         $i=0;
-        while ($i<100) {
-            $script_name = $scriptsList[mt_rand(0,count($scriptsList)-1)];
-            $start_time = $maxBackTime-mt_rand(0,$maxBackTime);
-            $end_time = mt_rand($start_time,$maxBackTime);
-            $result = $resultVariants[mt_rand(0,count($resultVariants)-1)];
-
+        while ($i<$lines) {
+            $script_name = $scriptsList[mt_rand(0,count($scriptsList)-1)]; // random value from scripts list
+            $start_time = $maxBackTime-mt_rand(0,$maxBackTime); // random time
+            $end_time = mt_rand($start_time,$maxBackTime); // random time that more than start_time
+            $result = $resultVariants[mt_rand(0,count($resultVariants)-1)]; // random result from array
+            /* add values to array */
             $queryValues[] = "('{$script_name}','".date('Y-m-d H:i:s',$start_time)."','".date('Y-m-d H:i:s',$end_time)."','{$result}')";
 
             $i++;
@@ -84,7 +97,7 @@ final class Init {
         /* try to execute query */
         try {
             $this->db->Query($query);
-            printf("%d rows added to table %s\n",$i,$this->tbl);
+            //printf("%d rows added to table %s\n",$i,$this->tbl); // debug info
         } catch (Exception $e) {
             print $e->getMessage();
         }
@@ -96,8 +109,11 @@ final class Init {
      *
      * Select all data from table with results 'normal' or 'success'
      * prints formatted data to stdout
+     *
+     * @param bool $print
+     * @return mixed
      */
-    public function get() {
+    public function get($print=false) {
         /* query for selecting all data for defined results */
         $query = "select
                 id,script_name,start_time,end_time,result
@@ -111,9 +127,13 @@ final class Init {
             print $e->getMessage();
         }
 
-        /* format data and print to stdout */
-        foreach ($data as $record) {
-            vprintf("%' 11d %' 25s %' 20s %' 20s  %s\n",$record);
+        /* format data and print to stdout if $print is true */
+        if ($print) {
+            foreach ($data as $record) {
+                vprintf("%' 11d %' 25s %' 20s %' 20s  %s\n", $record);
+            }
+        } else {
+            return $data;
         }
 
     }
