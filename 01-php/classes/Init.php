@@ -1,10 +1,26 @@
 <?php
+/**
+ * Test job for vacancy
+ *
+ * Vacancy decription:
+ * http://rabota.ua/company239121/vacancy6463561
+ *
+ * Test description:
+ * https://docs.google.com/document/d/15l2gZrQlMJg4OQthJ7eJaujdbxi4LbR58Vggd2z8H9A/edit#
+ *
+ * @author Igor <igor.goroun@gmail.com>
+ * @version 0.2
+ */
 
 final class Init {
 
     private $db=null;
     private $tbl="test";
 
+    /**
+     * Init constructor.
+     * @param $db
+     */
     public function __construct($db) {
         $this->db = $db;
     }
@@ -66,7 +82,7 @@ final class Init {
      * @return void
      */
     private function fill ($lines=100) {
-        /* get values for field `script_name` */
+        /* get values for field `script_name` (a list of scripts in /usr/bin dir) */
         $scriptsList = scandir("/usr/bin");
 
         /* default time value */

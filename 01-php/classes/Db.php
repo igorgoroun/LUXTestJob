@@ -1,14 +1,30 @@
 <?php
+/**
+ * Class Db
+ *
+ * Simple 10-minutes interface to mysql db
+ *
+ * @author Igor <igor.goroun@gmail.com>
+ * @version none
+ */
 
 class Db {
 
+    /* mysql connection paramaeters */
     private $host="127.0.0.1";
     private $port=3306;
     private $base=null;
     private $user=null;
     private $pass=null;
+
+    /* connection variable */
     private $conn=null;
 
+    /**
+     * Db constructor.
+     * @param array $params
+     * @throws Exception
+     */
     public function __construct($params=null)
     {
         if ($params == null) {
@@ -18,6 +34,13 @@ class Db {
 
     }
 
+    /**
+     * Makes select query from db
+     *
+     * @param $sql
+     * @return mixed
+     * @throws Exception
+     */
     public function Select($sql) {
         $this->mysqlConnect();
         $result = $this->conn->query($sql);
@@ -37,9 +60,17 @@ class Db {
 
     }
 
+    /**
+     * Makes a query except select
+     *
+     * @param $sql
+     * @return mixed
+     * @throws Exception
+     */
     public function Query($sql) {
         /* Get connection */
         $this->mysqlConnect();
+
         /* Run query */
         $result = $this->conn->query($sql);
 
