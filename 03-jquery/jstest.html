@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JSTest</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsrender/0.9.81/jsrender.min.js"></script>
+    <script src="jstest.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6 col-sm-12">
+            <div class="page-header">
+                <h1>JS Test job <small>by Igor Goroun</small></h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6 col-sm-12" id="buttons-container"></div>
+    </div>
+</div>
+<!-- Button template -->
+<script id="buttonTemplate" type="text/x-jsrender">
+<button class="btn btn-block cycle">{{:num}}</button>
+</script>
+<!-- Button template end -->
+</body>
+</html>
