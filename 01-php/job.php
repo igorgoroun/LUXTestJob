@@ -14,14 +14,14 @@ $mysql_params = [
 ];
 
 /* possible arguments for this script */
-$arguments = ['create','fill','get'];
+$arguments = ['create','create-force','fill','get'];
 
 /* check argument */
 if (isset($argv[1])) {
     $a = $argv[1];
 } else $a=false;
 if (!$a || !in_array($a,$arguments)) {
-    print "Please define one of ['create','fill','get'] arguments to start script\n";
+    print "Please define one of ['create','create-force','fill','get'] arguments to start script\n";
     exit();
 }
 
@@ -36,11 +36,19 @@ switch($a) {
     case 'create':
         $init->newtable();
         break;
+    case 'create-force':
+        $init->newtable(true);
+        break;
     case 'fill':
-        $init->filltable();
+        if (isset($argv[2]) && is_numeric($argv[2])) {
+            $lines=$argv[2];
+            $init->filltable($lines);
+        } else {
+            $init->filltable();
+        }
         break;
     default:
-        $init->get();
+        $init->get(true);
         break;
 }
 

@@ -159,8 +159,8 @@ final class Init {
      *
      * Temporary method for table creation testing
      */
-    public function newtable() {
-        $this->create();
+    public function newtable($force=false) {
+        $this->create($force);
     }
 
     /**
@@ -168,8 +168,8 @@ final class Init {
      *
      * Temporary method for table filling testing
      */
-    public function filltable() {
-        $this->fill();
+    public function filltable($lines=100) {
+        $this->fill($lines);
     }
 }
 
